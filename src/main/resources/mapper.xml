@@ -4,12 +4,11 @@
 
     <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="pojo.Book" id="bookMap">
-        <id column="id" property="bid" jdbcType="VARCHAR" />
+        <id column="bid" property="bid" jdbcType="VARCHAR" />
     </resultMap>
     
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="bookMap">
-        select *
-        from book 
+        select * from book
         where bid = #{bid,jdbcType=VARCHAR}
     </select>
     

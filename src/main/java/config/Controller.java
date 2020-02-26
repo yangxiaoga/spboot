@@ -14,12 +14,11 @@ public class Controller {
 	
 	@RequestMapping("/book")
 	public Book getBook() {
-		Book book1 = bookService.selectByPrimaryKey("a12334fges");
-		Book book2 = bookService.selectByPrimaryKey("a12334fges");
-		Book book3 = bookService.selectByPrimaryKey("a12334fges");
-		System.out.println(book2==book3);
-		
-		return book1;
+		Book book = null;
+		for (int i=0;i <20;i++) {
+			book = bookService.selectByPrimaryKey("a12334fges");
+		}
+		return book;
 	}
 
 }

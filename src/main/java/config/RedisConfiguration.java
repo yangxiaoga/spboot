@@ -2,10 +2,6 @@ package config;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -15,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
@@ -59,24 +56,12 @@ public class RedisConfiguration extends CachingConfigurerSupport{
 	@Bean
 	public CacheManager carcheManaget(RedisConnectionFactory redisConnectionFactory) {
 		RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
-		config = config.entryTtl(Duration.ofMinutes(1)).disableCachingNullValues();//缓存过期时间,不缓存空值
-		
-		// 设置一个初始化的缓存空间set集合
-        Set<String> cacheNames = new HashSet<>();
-        cacheNames.add("my-redis-cache1");
-        cacheNames.add("my-redis-cache2");
-
-        // 对每个缓存空间应用不同的配置
-        Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
-        configMap.put("my-redis-cache1", config);
-        configMap.put("my-redis-cache2", config.entryTtl(Duration.ofSeconds(120)));
-        
+		config = config.entryTtl(Duration.ofHours(1)).disableCachingNullValues();//缓存过期时间1h,不缓存空值
+      
         // 使用自定义的缓存配置初始化一个cacheManager
         RedisCacheManager cacheManager = RedisCacheManager
-        		.builder(redisConnectionFactory)     
-                .initialCacheNames(cacheNames)  // 注意这两句的调用顺序，一定要先调用该方法设置初始化的缓存名，再初始化相关的配置
-                .withInitialCacheConfigurations(configMap)
-                .build();
+        		.builder(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory))     
+                .cacheDefaults(config).build();
         return cacheManager;
 		
 	}

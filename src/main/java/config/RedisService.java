@@ -13,7 +13,7 @@ public class RedisService {
 	    //@Autowired
 	    //private UserDao userDao;
 	 
-	    @SuppressWarnings("rawtypes")
+	    @SuppressWarnings({ "rawtypes", "unused" })
 		@Autowired
 	    private RedisTemplate redisTemplate;
 	 
