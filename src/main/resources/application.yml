@@ -1,0 +1,20 @@
+spring:
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/test?serverTimezone=CTT&useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: 19921201
+    redis:
+      database: 0
+      host: 192.168.1.12 
+      port: 6379
+      #password: 
+      jedis:
+        pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 500
+          min-idle: 0
+mybatis:
+  mapper-locations: classpath:mapper.xml
+
